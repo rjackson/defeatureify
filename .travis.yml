@@ -4,3 +4,9 @@ node_js:
 install:
   - "npm install"
   - "npm install -g nodeunit"
+deploy:
+  provider: npm
+  email: "YOUR ENCRYPTED EMAIL"
+  api_key: "YOUR ENCRYPTED API KEY"
+  on:
+    - tags: true

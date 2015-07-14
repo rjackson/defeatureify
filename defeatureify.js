@@ -7,6 +7,7 @@ var defeatureify = function(source, config) {
 
   var namespace = config.namespace || "Ember";
   var debugStatements = config.debugStatements;
+  var namespaces = Array.isArray(namespace) ? namespace : [namespace];
 
   var tree = esprima.parse(source, {
     range: true,
@@ -40,7 +41,7 @@ var defeatureify = function(source, config) {
         node.test.callee.object.object &&
           node.test.callee.object.property) {
       // test namespace.FEATURES.isEnabled()
-      if (node.test.callee.object.object.name === namespace &&
+      if (namespaces.indexOf(node.test.callee.object.object.name) !== -1 &&
           node.test.callee.object.property.name === "FEATURES" &&
             node.test.callee.property.name === "isEnabled") {
 
@@ -55,8 +56,7 @@ var defeatureify = function(source, config) {
           node.test.callee.object.object.object &&
           node.test.callee.object.property) {
       // test namespace['default'].FEATURES.isEnabled()
-      if (node.test.callee.object.object.object.name === namespace &&
-          node.test.callee.object.object.property.value === 'default' &&
+      if (namespaces.indexOf(node.test.callee.object.object.object.name) !== -1 &&
           node.test.callee.object.property.name === "FEATURES" &&
             node.test.callee.property.name === "isEnabled") {
 
